@@ -1,20 +1,13 @@
-import http.client
 import json
 import math
-from datetime import date, datetime, timedelta
+from datetime import date
 from random import randint
 
 from tabulate import tabulate
 
-from allegrosettings import EMAIL_ADDRESS, JIRA_KEY, JIRA_SERVER, PROJECT_ID
-from jiraconnection import JIRA
-
 INCREMENT_SECONDS = 900 # 15 minutes
 OVERCLOCK_CHANCE = 90 # 20 Percent chance you go over time on an issue
 OVERCLOCK_RANGE = 2 # Number of increments possible to overclock
-
-
-
 
 class DayTimeSheet():
     def __init__(self, day, required, worklogs):

@@ -39,7 +39,8 @@ class JiraAccess():
     def getIssues(self, issueKeys: list[str]):
         keyString = ', '.join([f'\"{key}\"' for key in issueKeys])
         keyQuery = f"key IN ({keyString})"
-        sprintQuery = f"project={self.projectId} AND Sprint in openSprints() AND Assignee = currentUser()"
+        sprintQuery = f"project={self.projectId} AND Sprint in openSprints()"
+        sprintQuery += " AND Assignee = currentUser()"
         if len(issueKeys) > 0:
             queryString = f"({keyQuery}) OR ({sprintQuery})"
         else:
