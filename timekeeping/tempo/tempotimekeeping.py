@@ -2,6 +2,7 @@ import http.client
 import json
 
 from allegrosettings import TEMPO_TOKEN
+from timesheets.timesheet import DayTimeSheet, IssueTimeSheet, TimeSheet
 
 from ..interface import TimeKeepingInterface
 
@@ -124,4 +125,3 @@ class TempoAccess(TimeKeepingInterface):
         conn.getresponse()
 
         print('Done')
-

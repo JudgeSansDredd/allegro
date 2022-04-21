@@ -1,9 +1,9 @@
-from datetime import timedelta
-
-from allegrosettings import EMAIL_ADDRESS, JIRA_KEY, JIRA_SERVER, PROJECT_ID
-from timesheets.daytimesheet import DayTimeSheet
+from datetime import datetime, timedelta
 
 from jira import JIRA
+
+from allegrosettings import EMAIL_ADDRESS, JIRA_KEY, JIRA_SERVER, PROJECT_ID
+from timesheets.timesheet import DayTimeSheet, IssueTimeSheet, TimeSheet
 
 from ..interface import TimeKeepingInterface
 

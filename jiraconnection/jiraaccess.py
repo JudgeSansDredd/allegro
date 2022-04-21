@@ -1,5 +1,6 @@
-from allegrosettings import EMAIL_ADDRESS, JIRA_KEY, JIRA_SERVER, PROJECT_ID
 from jira import JIRA
+
+from allegrosettings import EMAIL_ADDRESS, JIRA_KEY, JIRA_SERVER, PROJECT_ID
 
 
 class JiraAccess():
