@@ -1,5 +1,2 @@
-pandas
 jira
 tabulate
-spotipy
-ipython
