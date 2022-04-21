@@ -2,16 +2,23 @@ from datetime import datetime, timedelta
 
 from jira import JIRA
 
-from allegrosettings import EMAIL_ADDRESS, JIRA_KEY, JIRA_SERVER, PROJECT_ID
+from allegrosettings import EMAIL_ADDRESS, JIRA_KEY, JIRA_SERVER, PROJECT_KEY
 from timesheets.timesheet import DayTimeSheet, IssueTimeSheet, TimeSheet
 
 from ..interface import TimeKeepingInterface
 
 
 class JiraTimekeeping(TimeKeepingInterface):
-    def __init__(self, server=JIRA_SERVER, emailAddress=EMAIL_ADDRESS, token=JIRA_KEY):
+    def __init__(
+        self,
+        server=JIRA_SERVER,
+        emailAddress=EMAIL_ADDRESS,
+        token=JIRA_KEY,
+        projectKey=PROJECT_KEY
+    ):
         self.emailAddress = emailAddress
         self.jira = JIRA({'server': server}, basic_auth=(emailAddress, token))
+        self.projectId = self.jira.project(projectKey).id
     def _getWorkDays(self, start, end):
         # TODO: Account for holidays
         return [
@@ -24,9 +31,9 @@ class JiraTimekeeping(TimeKeepingInterface):
             if (start + timedelta(days=i)).isoweekday() > 0
             and (start + timedelta(days=i)).isoweekday() < 6
         ]
-    def getWorkByDay(self, start, end, userId, projectId=PROJECT_ID):
+    def getWorkByDay(self, start, end, userId):
         issues = self.jira.search_issues(
-            f"project={projectId} AND Sprint in openSprints()",
+            f"project={self.projectId} AND Sprint in openSprints()",
             maxResults=1000
         )
 

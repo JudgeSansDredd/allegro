@@ -1,6 +1,6 @@
 from jira import JIRA
 
-from allegrosettings import EMAIL_ADDRESS, JIRA_KEY, JIRA_SERVER, PROJECT_ID
+from allegrosettings import EMAIL_ADDRESS, JIRA_KEY, JIRA_SERVER, PROJECT_KEY
 
 
 class JiraAccess():
@@ -9,10 +9,10 @@ class JiraAccess():
         server=JIRA_SERVER,
         emailAddress=EMAIL_ADDRESS,
         token=JIRA_KEY,
-        projectId=PROJECT_ID
+        projectKey=PROJECT_KEY
     ):
         self.jira = JIRA({'server': server}, basic_auth=(emailAddress, token))
-        self.projectId = projectId
+        self.projectId = self.jira.project(projectKey).id
 
     def getAccountId(self) -> str:
         return self.jira.myself()['accountId']

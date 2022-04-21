@@ -4,14 +4,12 @@ from random import randint
 
 from tabulate import tabulate
 
-from allegrosettings import TEMPO_IN_USE
+from allegrosettings import (INCREMENT_SECONDS, OVERCLOCK_CHANCE,
+                             OVERCLOCK_RANGE, TEMPO_IN_USE)
 from jiraconnection.jiraaccess import JiraAccess
 from timekeeping.jira.jiratimekeeping import JiraTimekeeping
 from timekeeping.tempo.tempotimekeeping import TempoAccess
 
-INCREMENT_SECONDS = 900 # 15 minutes
-OVERCLOCK_CHANCE = 90 # 20 Percent chance you go over time on an issue
-OVERCLOCK_RANGE = 2 # Number of increments possible to overclock
 
 def collectInfo() -> tuple[date, date, list[str]]:
     strStart = input('Start Date [YYYY-MM-DD]: ')
