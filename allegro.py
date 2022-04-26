@@ -7,7 +7,6 @@ from random import randint
 from tabulate import tabulate
 from whiptail import Whiptail
 
-from allegrosettings import EMAIL_ADDRESS, INCREMENT_SECONDS, OVERCLOCK_CHANCE
 from jiraconnection.jiraaccess import JiraAccess
 from timekeeping.jiratimekeeping import JiraTimekeeping
 
@@ -15,17 +14,15 @@ WHIPTAIL_SETTINGS={
     "title": "Allegro, a Fast Tempo",
     "width": 75
 }
+configPath = Path(f'{Path.home()}/.allegro/config.ini')
 
 def getConfiguration():
-    # Config path
-    configPath = Path(f'{Path.home()}/.allegro/config.ini')
-
     # Whiptail
     wt = Whiptail(WHIPTAIL_SETTINGS)
 
     # Get the config object as it exists
-    config_object = ConfigParser()
-    config_object.read(configPath)
+    config = ConfigParser()
+    config.read(configPath)
 
     configItems = {
         "JIRA": [
@@ -41,32 +38,25 @@ def getConfiguration():
         ]
     }
 
+    # Set up config and prompt if needed
     for section, options in configItems.items():
-        if not config_object.has_section(section):
-            config_object.add_section(section)
+        if not config.has_section(section):
+            config.add_section(section)
         for option in options:
-            if not config_object.has_option(section, option):
-                config_object.set(section, option, 'foo')
-
-    # #Assume we need 2 sections in the config file, let's call them USERINFO and SERVERCONFIG
-    # config_object["JIRA"] = {
-    #     "jira_server": "Chankey Pathak",
-    #     "loginid": "chankeypathak",
-    #     "password": "tutswiki"
-    # }
-
-    # config_object["SERVERCONFIG"] = {
-    #     "host": "tutswiki.com",
-    #     "port": "8080",
-    #     "ipaddr": "8.8.8.8"
-    # }
-
+            if not config.has_option(section, option):
+                default = "https://bandwidth-jira.atlassian.net" if option == "JIRA_SERVER" else ""
+                value, response = wt.inputbox(f"Enter value for: {option}", default)
+                if response == 1:
+                    return False
+                config.set(section, option, value)
 
 
     # Make sure the .allegro directory exists
     configPath.parents[0].mkdir(parents=True)
     with open(configPath, 'w', encoding="UTF-8") as conf:
-        config_object.write(conf)
+        config.write(conf)
+
+    return True
 
 def collectInfo(jira):
     wt = Whiptail(**WHIPTAIL_SETTINGS)
@@ -133,11 +123,17 @@ def askToProceed(days, issues, submissions):
 
 def main():
     # Make sure our config file is written and has necessary info
-    getConfiguration()
-    return
+    cancelled = getConfiguration()
+    if cancelled:
+        return
+
+    # Get settings
+    config = ConfigParser()
+    config.read(configPath)
+
     # Access jira and timekeeping
-    jira = JiraAccess()
-    timekeeping = JiraTimekeeping()
+    jira = JiraAccess(configPath)
+    timekeeping = JiraTimekeeping(configPath)
 
     # Collect user information
     start, end, issues = collectInfo(jira)
@@ -145,14 +141,11 @@ def main():
     if not start:
         return
 
-    # Get Jira account id
-    userId = jira.getAccountId()
-
     numIssues = len(issues)
     # numPoints = sum([issue.fields.customfield_10002 for issue in issues])
 
     # Get worked hours
-    timeSheets = timekeeping.getWorkByDay(start, end, userId)
+    timeSheets = timekeeping.getWorkByDay(start, end)
 
     # Time per issue
     totalNeeded = timeSheets.getTotalNeeded(issues)
@@ -169,7 +162,8 @@ def main():
             numIncrements = math.ceil(allowed / INCREMENT_SECONDS)
             noOverclockTime = numIncrements * INCREMENT_SECONDS
             overclocking = randint(1, 100) <= OVERCLOCK_CHANCE
-            overclockTime = randint(1, OVERCLOCK_RANGE) * INCREMENT_SECONDS if overclocking else 0
+            overclockRange = int(config.get('ALLEGRO', 'OVERCLOCK_RANGE'))
+            overclockTime = randint(1, overclockRange) * INCREMENT_SECONDS if overclocking else 0
             timeSheets.addWork(day, issue, noOverclockTime)
             queuedSubmissions.append({
                 'issue': issue,
@@ -181,7 +175,7 @@ def main():
 
     if proceed:
         for queuedSubmission in queuedSubmissions:
-            timekeeping.submitTime(queuedSubmission, userId)
+            timekeeping.submitTime(queuedSubmission)
 
 if __name__ == '__main__':
     main()

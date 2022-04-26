@@ -1,21 +1,22 @@
-from jira import JIRA
+from configparser import ConfigParser
+from pathlib import Path
 
-from allegrosettings import EMAIL_ADDRESS, JIRA_KEY, JIRA_SERVER, PROJECT_KEY
+from jira import JIRA
 
 
 class JiraAccess():
-    def __init__(
-        self,
-        server=JIRA_SERVER,
-        emailAddress=EMAIL_ADDRESS,
-        token=JIRA_KEY,
-        projectKey=PROJECT_KEY
-    ):
-        self.jira = JIRA({'server': server}, basic_auth=(emailAddress, token))
-        self.projectId = self.jira.project(projectKey).id
-
-    def getAccountId(self):
-        return self.jira.myself()['accountId']
+    def __init__(self, configPath):
+        config = ConfigParser()
+        config.read(configPath)
+        self.jira = JIRA(
+            {'server': config.get('JIRA', 'JIRA_SERVER')},
+            basic_auth=(
+                config.get('JIRA', 'EMAIL_ADDRESS'),
+                config.get('JIRA', 'JIRA_KEY')
+            )
+        )
+        self.projectId = self.jira.project(config.get('JIRA', 'PROJECT_KEY')).id
+        self.emailAddress = config.get('JIRA', 'EMAIL_ADDRESS')
 
     def getAllSubtasks(self, issueKeys):
         issues = self.getIssues(issueKeys)
@@ -26,7 +27,7 @@ class JiraAccess():
                 for st
                 in self._getSubtasksAsIssues(issue)
                 if st.fields.assignee is not None
-                and st.fields.assignee.emailAddress.lower() == EMAIL_ADDRESS.lower()
+                and st.fields.assignee.emailAddress.lower() == self.emailAddress.lower()
             ]
             subtasks.reverse()
             allFilteredSubtasks.extend(subtasks)

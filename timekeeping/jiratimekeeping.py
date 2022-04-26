@@ -1,22 +1,25 @@
+from configparser import ConfigParser
 from datetime import datetime, timedelta
+from pathlib import Path
 
 from jira import JIRA
 
-from allegrosettings import EMAIL_ADDRESS, JIRA_KEY, JIRA_SERVER, PROJECT_KEY
 from timesheets.timesheet import DayTimeSheet, IssueTimeSheet, TimeSheet
 
 
 class JiraTimekeeping():
-    def __init__(
-        self,
-        server=JIRA_SERVER,
-        emailAddress=EMAIL_ADDRESS,
-        token=JIRA_KEY,
-        projectKey=PROJECT_KEY
-    ):
-        self.emailAddress = emailAddress
-        self.jira = JIRA({'server': server}, basic_auth=(emailAddress, token))
-        self.projectId = self.jira.project(projectKey).id
+    def __init__(self, configPath):
+        config = ConfigParser()
+        config.read(configPath)
+        self.emailAddress = config.get('JIRA', 'EMAIL_ADDRESS')
+        self.jira = JIRA(
+            {'server': config.get('JIRA', 'JIRA_SERVER')},
+            basic_auth=(
+                config.get('JIRA', 'EMAIL_ADDRESS'),
+                config.get('JIRA', 'JIRA_KEY')
+            )
+        )
+        self.projectId = self.jira.project(config.get('JIRA', 'PROJECT_KEY')).id
     def _getWorkDays(self, start, end):
         # TODO: Account for holidays
         return [
@@ -29,7 +32,7 @@ class JiraTimekeeping():
             if (start + timedelta(days=i)).isoweekday() > 0
             and (start + timedelta(days=i)).isoweekday() < 6
         ]
-    def getWorkByDay(self, start, end, userId):
+    def getWorkByDay(self, start, end):
         issues = self.jira.search_issues(
             f"project={self.projectId} AND Sprint in openSprints()",
             maxResults=1000
@@ -71,7 +74,7 @@ class JiraTimekeeping():
                     workByIssue[issue].addWork(time)
         return TimeSheet(workByDate, workByIssue)
 
-    def submitTime(self, submission, userId):
+    def submitTime(self, submission):
         issue = submission['issue']
         day = submission['day']
         timeSpent = submission['timeSpent']
