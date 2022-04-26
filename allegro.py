@@ -18,7 +18,7 @@ configPath = Path(f'{Path.home()}/.allegro/config.ini')
 
 def getConfiguration():
     # Whiptail
-    wt = Whiptail(WHIPTAIL_SETTINGS)
+    wt = Whiptail(**WHIPTAIL_SETTINGS)
 
     # Get the config object as it exists
     config = ConfigParser()
