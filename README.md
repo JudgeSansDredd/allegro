@@ -24,7 +24,7 @@ Thanks, I'm a ridiculous person, so that tracks.
 
 This isn't user-proof code. You'll need to use your years of experience and highly honed developer senses
 to make sure you enter the required information correctly. **Allegro does not fail gracefully.** You will
-have a chance to give final approval before it submits anything to jira or tempo, though, so you're safe
+have a chance to give final approval before it submits anything to jira, though, so you're safe
 until that point.
 
 ## Installing, a.k.a. easy mode
@@ -55,9 +55,6 @@ curl etc.
    EMAIL_ADDRESS='your-email-address@example.com'
    JIRA_KEY='your-jira-api-key'
    PROJECT_KEY="ABC" # This will be the letter designation on all of your tickets
-
-   TEMPO_IN_USE=False # Does your company use Tempo to track time?
-   TEMPO_TOKEN='' # Tempo has its own api, you'll need a token there, too
 
    INCREMENT_SECONDS = 900 # 15 minutes, i.e. how grandular should we enter time?
    OVERCLOCK_CHANCE = 90 # 20 Percent chance you go over time on an issue

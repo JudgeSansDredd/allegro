@@ -7,11 +7,9 @@ from random import randint
 from tabulate import tabulate
 from whiptail import Whiptail
 
-from allegrosettings import (EMAIL_ADDRESS, INCREMENT_SECONDS,
-                             OVERCLOCK_CHANCE, OVERCLOCK_RANGE, TEMPO_IN_USE)
+from allegrosettings import EMAIL_ADDRESS, INCREMENT_SECONDS, OVERCLOCK_CHANCE
 from jiraconnection.jiraaccess import JiraAccess
-from timekeeping.jira.jiratimekeeping import JiraTimekeeping
-from timekeeping.tempo.tempotimekeeping import TempoAccess
+from timekeeping.jiratimekeeping import JiraTimekeeping
 
 WHIPTAIL_SETTINGS={
     "title": "Allegro, a Fast Tempo",
@@ -35,10 +33,6 @@ def getConfiguration():
             "EMAIL_ADDRESS",
             "JIRA_KEY",
             "PROJECT_KEY"
-        ],
-        "TEMPO": [
-            "TEMPO_IN_USE",
-            "TEMPO_TOKEN"
         ],
         "ALLEGRO": [
             "INCREMENT_SECONDS",
@@ -143,10 +137,7 @@ def main():
     return
     # Access jira and timekeeping
     jira = JiraAccess()
-    if TEMPO_IN_USE:
-        timekeeping = TempoAccess()
-    else:
-        timekeeping = JiraTimekeeping()
+    timekeeping = JiraTimekeeping()
 
     # Collect user information
     start, end, issues = collectInfo(jira)
@@ -154,7 +145,7 @@ def main():
     if not start:
         return
 
-    # Get Jira/Tempo account id
+    # Get Jira account id
     userId = jira.getAccountId()
 
     numIssues = len(issues)

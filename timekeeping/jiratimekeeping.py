@@ -5,10 +5,8 @@ from jira import JIRA
 from allegrosettings import EMAIL_ADDRESS, JIRA_KEY, JIRA_SERVER, PROJECT_KEY
 from timesheets.timesheet import DayTimeSheet, IssueTimeSheet, TimeSheet
 
-from ..interface import TimeKeepingInterface
 
-
-class JiraTimekeeping(TimeKeepingInterface):
+class JiraTimekeeping():
     def __init__(
         self,
         server=JIRA_SERVER,
