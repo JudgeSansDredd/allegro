@@ -50,3 +50,7 @@ class JiraAccess():
             queryString,
             maxResults=False
         )
+
+    def getIssuesForMenu(self):
+        queryString = f"project={self.projectId} AND Sprint in openSprints()"
+        return self.jira.search_issues(queryString, maxResults=False)

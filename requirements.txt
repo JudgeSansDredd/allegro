@@ -1,2 +1,3 @@
 jira
 tabulate
+whiptail-dialogs
