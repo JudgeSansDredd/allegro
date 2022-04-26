@@ -1,5 +1,7 @@
 import math
+from configparser import ConfigParser
 from datetime import date
+from pathlib import Path
 from random import randint
 
 from tabulate import tabulate
@@ -15,6 +17,62 @@ WHIPTAIL_SETTINGS={
     "title": "Allegro, a Fast Tempo",
     "width": 75
 }
+
+def getConfiguration():
+    # Config path
+    configPath = Path(f'{Path.home()}/.allegro/config.ini')
+
+    # Whiptail
+    wt = Whiptail(WHIPTAIL_SETTINGS)
+
+    # Get the config object as it exists
+    config_object = ConfigParser()
+    config_object.read(configPath)
+
+    configItems = {
+        "JIRA": [
+            "JIRA_SERVER",
+            "EMAIL_ADDRESS",
+            "JIRA_KEY",
+            "PROJECT_KEY"
+        ],
+        "TEMPO": [
+            "TEMPO_IN_USE",
+            "TEMPO_TOKEN"
+        ],
+        "ALLEGRO": [
+            "INCREMENT_SECONDS",
+            "OVERCLOCK_CHANCE",
+            "OVERCLOCK_RANGE"
+        ]
+    }
+
+    for section, options in configItems.items():
+        if not config_object.has_section(section):
+            config_object.add_section(section)
+        for option in options:
+            if not config_object.has_option(section, option):
+                config_object.set(section, option, 'foo')
+
+    # #Assume we need 2 sections in the config file, let's call them USERINFO and SERVERCONFIG
+    # config_object["JIRA"] = {
+    #     "jira_server": "Chankey Pathak",
+    #     "loginid": "chankeypathak",
+    #     "password": "tutswiki"
+    # }
+
+    # config_object["SERVERCONFIG"] = {
+    #     "host": "tutswiki.com",
+    #     "port": "8080",
+    #     "ipaddr": "8.8.8.8"
+    # }
+
+
+
+    # Make sure the .allegro directory exists
+    configPath.parents[0].mkdir(parents=True)
+    with open(configPath, 'w', encoding="UTF-8") as conf:
+        config_object.write(conf)
 
 def collectInfo(jira):
     wt = Whiptail(**WHIPTAIL_SETTINGS)
@@ -61,27 +119,6 @@ def getWorkOnIssue(timesheets, issue):
             total += sheet.worklogs[issue]
     return total
 
-# def askToProceed(days, issues, submissions):
-#     wt = Whiptail(**WHIPTAIL_SETTINGS)
-#     tableData = []
-#     headers = ['']
-#     headers.extend(days)
-#     for issue in issues:
-#         row = [issue]
-#         for day in days:
-#             time = sum([
-#                 submission['timeSpent']
-#                 for submission in submissions
-#                 if submission['day'] == day
-#                 and submission['issue'] == issue
-#             ]) / 3600 # Convert to hours
-#             row.append(time)
-#         tableData.append(row)
-#     # print(tabulate(tableData, headers=headers))
-#     # NOTE: There seems to be a bug in whiptail, in which the output from
-#     # a yesno box is inverted, hence the inclusion of 'not' here
-#     return not wt.yesno(tabulate(tableData, headers=headers), default="no")
-
 def askToProceed(days, issues, submissions):
     wt = Whiptail(**WHIPTAIL_SETTINGS)
     tableData = []
@@ -101,6 +138,9 @@ def askToProceed(days, issues, submissions):
     return not wt.yesno(tabulate(tableData, headers=headers), default="no")
 
 def main():
+    # Make sure our config file is written and has necessary info
+    getConfiguration()
+    return
     # Access jira and timekeeping
     jira = JiraAccess()
     if TEMPO_IN_USE:
