@@ -52,7 +52,7 @@ def getConfiguration():
 
 
     # Make sure the .allegro directory exists
-    configPath.parents[0].mkdir(parents=True)
+    configPath.parents[0].mkdir(parents=True, exist_ok=True)
     with open(configPath, 'w', encoding="UTF-8") as conf:
         config.write(conf)
 
@@ -80,7 +80,7 @@ def collectInfo(jira):
         [
             issue.key,
             issue.fields.summary[:47] + '...' if len(issue.fields.summary) > 50 else issue.fields.summary,
-            "1" if issue.fields.assignee.emailAddress == EMAIL_ADDRESS else "0"
+            "1" if issue.fields.assignee.emailAddress == jira.emailAddress else "0"
         ]
         for issue in issues
     ]
@@ -123,13 +123,16 @@ def askToProceed(days, issues, submissions):
 
 def main():
     # Make sure our config file is written and has necessary info
-    cancelled = getConfiguration()
-    if cancelled:
+    proceed = getConfiguration()
+    if not proceed:
         return
 
     # Get settings
     config = ConfigParser()
     config.read(configPath)
+    overclockRange = int(config.get('ALLEGRO', 'OVERCLOCK_RANGE'))
+    incrementSeconds = int(config.get('ALLEGRO', 'INCREMENT_SECONDS'))
+    overclockChance = int(config.get('ALLEGRO', 'OVERCLOCK_CHANCE'))
 
     # Access jira and timekeeping
     jira = JiraAccess(configPath)
@@ -159,11 +162,10 @@ def main():
             allowed = timeSheets.getAllowedWork(day, issue)
             if allowed == 0:
                 continue
-            numIncrements = math.ceil(allowed / INCREMENT_SECONDS)
-            noOverclockTime = numIncrements * INCREMENT_SECONDS
-            overclocking = randint(1, 100) <= OVERCLOCK_CHANCE
-            overclockRange = int(config.get('ALLEGRO', 'OVERCLOCK_RANGE'))
-            overclockTime = randint(1, overclockRange) * INCREMENT_SECONDS if overclocking else 0
+            numIncrements = math.ceil(allowed / incrementSeconds)
+            noOverclockTime = numIncrements * incrementSeconds
+            overclocking = randint(1, 100) <= overclockChance
+            overclockTime = randint(1, overclockRange) * incrementSeconds if overclocking else 0
             timeSheets.addWork(day, issue, noOverclockTime)
             queuedSubmissions.append({
                 'issue': issue,
