@@ -26,7 +26,13 @@ This isn't user-proof code. You'll need to use your years of experience and high
 to make sure you enter the required information correctly. **Allegro does not fail gracefully.** You will have a chance to give
 final approval before it submits anything to jira or tempo, though, so you're safe until that point.
 
-## Setup
+## Installing, a.k.a. easy mode
+
+```
+curl etc.
+```
+
+## To Develop, or Run from Source
 
 1. _Optional:_ Create a python virtual environment, then activate it
 
@@ -55,4 +61,9 @@ final approval before it submits anything to jira or tempo, though, so you're sa
    INCREMENT_SECONDS = 900 # 15 minutes, i.e. how grandular should we enter time?
    OVERCLOCK_CHANCE = 90 # 20 Percent chance you go over time on an issue
    OVERCLOCK_RANGE = 2 # Number of increments possible to overclock
+   ```
+
+4. Ready to run!
+   ```
+   python3 allegro.py
    ```
