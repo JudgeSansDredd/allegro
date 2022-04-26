@@ -48,20 +48,7 @@ curl etc.
    pip3 install -r requirements.txt
    ```
 
-3. Create `allegrosettings.py` to hold the settings you want Allegro to use. Here's a template:
-
-   ```
-   JIRA_SERVER='https://your-company-jira-address.atlassian.net'
-   EMAIL_ADDRESS='your-email-address@example.com'
-   JIRA_KEY='your-jira-api-key'
-   PROJECT_KEY="ABC" # This will be the letter designation on all of your tickets
-
-   INCREMENT_SECONDS = 900 # 15 minutes, i.e. how grandular should we enter time?
-   OVERCLOCK_CHANCE = 90 # 20 Percent chance you go over time on an issue
-   OVERCLOCK_RANGE = 2 # Number of increments possible to overclock
-   ```
-
-4. Ready to run!
+3. Ready to run!
    ```
    python3 allegro.py
    ```
@@ -77,7 +64,7 @@ curl etc.
 2. Create binary
 
    ```
-   pyinstaller allegro.py --onefile
+   pyinstaller allegro.py --onefile --distpath ./dist/{YOUR_ARCHITECTURE}
    ```
 
 3. Binary now exists at `./dist/allegro`
