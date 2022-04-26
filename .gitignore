@@ -3,3 +3,5 @@ __pycache__/
 allegrosettings.py
 rpgrbsettings.py
 .cache
+allegro.spec
+build/

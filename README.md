@@ -23,10 +23,34 @@ Thanks, I'm a ridiculous person, so that tracks.
 > You're gonna break my computer, aren't you?
 
 This isn't user-proof code. You'll need to use your years of experience and highly honed developer senses
-to make sure you enter the required information correctly. **Allegro does not fail gracefully.** You will have a chance to give
-final approval before it submits anything to jira or tempo, though, so you're safe until that point.
+to make sure you enter the required information correctly. **Allegro does not fail gracefully.** You will
+have a chance to give final approval before it submits anything to jira, though, so you're safe
+until that point.
 
-## Setup
+## Installing, a.k.a. easy mode
+
+macOs
+
+```
+sudo curl https://raw.githubusercontent.com/JudgeSansDredd/allegro/master/dist/macos/allegro --output /usr/local/bin/allegro && sudo chmod +x /usr/local/bin/allegro
+```
+
+debian
+
+```
+sudo curl https://raw.githubusercontent.com/JudgeSansDredd/allegro/master/dist/debian/allegro --output /usr/local/bin/allegro && sudo chmod +x /usr/local/bin/allegro
+```
+
+## Configuration
+
+> It's asking me a lot of weird questions. What's the deal?
+
+On first run, Allegro will ask for needed configuration, such as your Jira
+Access key, email address, etc. Don't worry, there won't be a test each time.
+
+- `JIRA_KEY`: This can be found at https://id.atlassian.com/manage-profile/security/api-tokens. You may need to generate a key, if you haven't already
+
+## To Develop, or Run from Source
 
 1. _Optional:_ Create a python virtual environment, then activate it
 
@@ -41,18 +65,23 @@ final approval before it submits anything to jira or tempo, though, so you're sa
    pip3 install -r requirements.txt
    ```
 
-3. Create `allegrosettings.py` to hold the settings you want Allegro to use. Here's a template:
+3. Ready to run!
+   ```
+   python3 allegro.py
+   ```
+
+## Building from source
+
+1. Install `pyinstaller`
 
    ```
-   JIRA_SERVER='https://your-company-jira-address.atlassian.net'
-   EMAIL_ADDRESS='your-email-address@example.com'
-   JIRA_KEY='your-jira-api-key'
-   PROJECT_KEY="ABC" # This will be the letter designation on all of your tickets
-
-   TEMPO_IN_USE=False # Does your company use Tempo to track time?
-   TEMPO_TOKEN='' # Tempo has its own api, you'll need a token there, too
-
-   INCREMENT_SECONDS = 900 # 15 minutes, i.e. how grandular should we enter time?
-   OVERCLOCK_CHANCE = 90 # 20 Percent chance you go over time on an issue
-   OVERCLOCK_RANGE = 2 # Number of increments possible to overclock
+   pip3 install pyinstaller
    ```
+
+2. Create binary
+
+   ```
+   pyinstaller allegro.py --onefile --distpath ./dist/{YOUR_ARCHITECTURE}
+   ```
+
+3. Binary now exists at `./dist/allegro`
