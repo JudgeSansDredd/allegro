@@ -11,9 +11,13 @@ from jiraconnection.jiraaccess import JiraAccess
 from timekeeping.jira.jiratimekeeping import JiraTimekeeping
 from timekeeping.tempo.tempotimekeeping import TempoAccess
 
+WHIPTAIL_SETTINGS={
+    "title": "Allegro, a Fast Tempo",
+    "width": 75
+}
 
-def collectInfo(jira: JiraAccess) -> tuple[date, date, list[str]]:
-    wt = Whiptail(title="Allegro, a Fast Tempo", width=75)
+def collectInfo(jira):
+    wt = Whiptail(**WHIPTAIL_SETTINGS)
     today = date.today().isoformat()
 
     # Get Start Date
@@ -29,7 +33,7 @@ def collectInfo(jira: JiraAccess) -> tuple[date, date, list[str]]:
     end = date(*[int(x) for x in strEnd.split('-')])
 
     # Get jira issues
-    issues = jira.getIssuesForMenu()
+    issues = jira.getIssues()
     issueList = [
         [
             issue.key,
@@ -57,28 +61,43 @@ def getWorkOnIssue(timesheets, issue):
             total += sheet.worklogs[issue]
     return total
 
+# def askToProceed(days, issues, submissions):
+#     wt = Whiptail(**WHIPTAIL_SETTINGS)
+#     tableData = []
+#     headers = ['']
+#     headers.extend(days)
+#     for issue in issues:
+#         row = [issue]
+#         for day in days:
+#             time = sum([
+#                 submission['timeSpent']
+#                 for submission in submissions
+#                 if submission['day'] == day
+#                 and submission['issue'] == issue
+#             ]) / 3600 # Convert to hours
+#             row.append(time)
+#         tableData.append(row)
+#     # print(tabulate(tableData, headers=headers))
+#     # NOTE: There seems to be a bug in whiptail, in which the output from
+#     # a yesno box is inverted, hence the inclusion of 'not' here
+#     return not wt.yesno(tabulate(tableData, headers=headers), default="no")
+
 def askToProceed(days, issues, submissions):
-    wt = Whiptail(title="Allegro, a Fast Tempo", width=75)
+    wt = Whiptail(**WHIPTAIL_SETTINGS)
     tableData = []
     headers = ['']
-    headers.extend(days)
-    for issue in issues:
-        row = [issue]
-        for day in days:
-            time = sum(
-                [
-                    submission['timeSpent']
-                    for submission
-                    in submissions
-                    if submission['day'] == day
-                    and submission['issue'] == issue
-                ]
-            ) / 3600 # Convert to hours
+    headers.extend(issues)
+    for day in days:
+        row = [day]
+        for issue in issues:
+            time = sum([
+                submission['timeSpent']
+                for submission in submissions
+                if submission['day'] == day
+                and submission['issue'] == issue
+            ]) / 3600 # Convert to hours
             row.append(time)
         tableData.append(row)
-    # print(tabulate(tableData, headers=headers))
-    # NOTE: There seems to be a bug in whiptail, in which the output from
-    # a yesno box is inverted, hence the inclusion of 'not' here
     return not wt.yesno(tabulate(tableData, headers=headers), default="no")
 
 def main():

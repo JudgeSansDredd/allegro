@@ -10,12 +10,18 @@ class TimeSheet():
     def setRequiredPerIssue(self, time):
         self.requiredPerIssue = time
 
-    def getDays(self) -> list[str]:
+    def getDays(self):
         return self.dayTimeSheets.keys()
 
-    def getTotalNeeded(self, issues) -> int:
-        required = sum(sheet.required for sheet in self.dayTimeSheets.values())
-        worked   = sum([sheet.getWorkedMisc(issues) for sheet in self.dayTimeSheets.values()])
+    def getTotalNeeded(self, issues):
+        required = sum([
+            sheet.required
+            for sheet in self.dayTimeSheets.values()
+        ])
+        worked   = sum([
+            sheet.getWorkedMisc(issues)
+            for sheet in self.dayTimeSheets.values()
+        ])
         needed = required - worked
         return needed if needed > 0 else 0
 
@@ -26,7 +32,7 @@ class TimeSheet():
         else:
             self.issueTimeSheets[issue] = IssueTimeSheet(issue, time)
 
-    def getAllowedWork(self, day, issue) -> int:
+    def getAllowedWork(self, day, issue):
         if self.requiredPerIssue is None:
             raise Exception('You have not set the required per issue variable')
         dayNeeded = self.dayTimeSheets[day].needed
@@ -81,4 +87,9 @@ class DayTimeSheet():
         self.needed = self.required - self.worked
 
     def getWorkedMisc(self, issues):
-        return sum([worklog for issue, worklog in self.worklogs.items() if issue not in issues])
+        return sum([
+            worklog
+            for issue, worklog
+            in self.worklogs.items()
+            if issue not in issues
+        ])

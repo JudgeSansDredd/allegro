@@ -14,10 +14,10 @@ class JiraAccess():
         self.jira = JIRA({'server': server}, basic_auth=(emailAddress, token))
         self.projectId = self.jira.project(projectKey).id
 
-    def getAccountId(self) -> str:
+    def getAccountId(self):
         return self.jira.myself()['accountId']
 
-    def getAllSubtasks(self, issueKeys) -> list[str]:
+    def getAllSubtasks(self, issueKeys):
         issues = self.getIssues(issueKeys)
         allFilteredSubtasks = []
         for issue in issues:
@@ -37,12 +37,15 @@ class JiraAccess():
         subtaskIds = [subtask.key for subtask in parentIssue.fields.subtasks]
         return self.getIssues(subtaskIds) if subtaskIds else []
 
-    def getIssues(self, issueKeys: list[str]):
-        keyString = ', '.join([f'\"{key}\"' for key in issueKeys])
-        keyQuery = f"key IN ({keyString})"
+    def getIssues(self, issueKeys=None):
+        """
+        Gets all issues in current sprint, plus any additional issues specified
+        by issueKeys, which is a list of keys.
+        """
         sprintQuery = f"project={self.projectId} AND Sprint in openSprints()"
-        sprintQuery += " AND Assignee = currentUser()"
-        if len(issueKeys) > 0:
+        if issueKeys is not None and len(issueKeys) > 0:
+            keyString = ', '.join([f'\"{key}\"' for key in issueKeys])
+            keyQuery = f"key IN ({keyString})"
             queryString = f"({keyQuery}) OR ({sprintQuery})"
         else:
             queryString = sprintQuery
@@ -50,7 +53,3 @@ class JiraAccess():
             queryString,
             maxResults=False
         )
-
-    def getIssuesForMenu(self):
-        queryString = f"project={self.projectId} AND Sprint in openSprints()"
-        return self.jira.search_issues(queryString, maxResults=False)
