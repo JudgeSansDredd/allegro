@@ -28,15 +28,27 @@ have a chance to give final approval before it submits anything to jira, though,
 until that point.
 
 ## Installing, a.k.a. easy mode
+
 macOs
+
 ```
 sudo curl https://raw.githubusercontent.com/JudgeSansDredd/allegro/master/dist/macos/allegro --output /usr/local/bin/allegro && sudo chmod +x /usr/local/bin/allegro
 ```
 
 debian
+
 ```
 sudo curl https://raw.githubusercontent.com/JudgeSansDredd/allegro/master/dist/debian/allegro --output /usr/local/bin/allegro && sudo chmod +x /usr/local/bin/allegro
 ```
+
+## Configuration
+
+> It's asking me a lot of weird questions. What's the deal?
+
+On first run, Allegro will ask for needed configuration, such as your Jira
+Access key, email address, etc. Don't worry, there won't be a test each time.
+
+- `JIRA_KEY`: This can be found at https://id.atlassian.com/manage-profile/security/api-tokens. You may need to generate a key, if you haven't already
 
 ## To Develop, or Run from Source
 
