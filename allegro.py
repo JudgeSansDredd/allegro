@@ -10,8 +10,9 @@ from whiptail import Whiptail
 from jiraconnection.jiraaccess import JiraAccess
 from timekeeping.jiratimekeeping import JiraTimekeeping
 
+VERSION="1.0.0"
 WHIPTAIL_SETTINGS={
-    "title": "Allegro, a Fast Tempo",
+    "title": f"Allegro ({VERSION})",
     "width": 75
 }
 configPath = Path(f'{Path.home()}/.allegro/config.ini')
