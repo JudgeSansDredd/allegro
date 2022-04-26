@@ -23,8 +23,9 @@ Thanks, I'm a ridiculous person, so that tracks.
 > You're gonna break my computer, aren't you?
 
 This isn't user-proof code. You'll need to use your years of experience and highly honed developer senses
-to make sure you enter the required information correctly. **Allegro does not fail gracefully.** You will have a chance to give
-final approval before it submits anything to jira or tempo, though, so you're safe until that point.
+to make sure you enter the required information correctly. **Allegro does not fail gracefully.** You will
+have a chance to give final approval before it submits anything to jira or tempo, though, so you're safe
+until that point.
 
 ## Installing, a.k.a. easy mode
 
@@ -67,3 +68,19 @@ curl etc.
    ```
    python3 allegro.py
    ```
+
+## Building from source
+
+1. Install `pyinstaller`
+
+   ```
+   pip3 install pyinstaller
+   ```
+
+2. Create binary
+
+   ```
+   pyinstaller allegro.py --onefile
+   ```
+
+3. Binary now exists at `./dist/allegro`
