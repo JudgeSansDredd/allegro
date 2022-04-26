@@ -28,9 +28,14 @@ have a chance to give final approval before it submits anything to jira, though,
 until that point.
 
 ## Installing, a.k.a. easy mode
-
+macOs
 ```
-curl etc.
+sudo curl https://raw.githubusercontent.com/JudgeSansDredd/allegro/master/dist/macos/allegro --output /usr/local/bin/allegro && sudo chmod +x /usr/local/bin/allegro
+```
+
+debian
+```
+sudo curl https://raw.githubusercontent.com/JudgeSansDredd/allegro/master/dist/debian/allegro --output /usr/local/bin/allegro && sudo chmod +x /usr/local/bin/allegro
 ```
 
 ## To Develop, or Run from Source
