@@ -46,32 +46,6 @@ debian
 sudo curl https://raw.githubusercontent.com/JudgeSansDredd/allegro/master/dist/debian/allegro --output /usr/local/bin/allegro && sudo chmod +x /usr/local/bin/allegro
 ```
 
-## Configuration
-
-> It's asking me a lot of weird questions. What's the deal?
-
-On first run, Allegro will ask for needed configuration, such as your Jira
-Access key, email address, etc. It's writing the configuration to `~/.allegro/config.ini`,
-so it won't have to ask each time.
-
-> Okay, sure, but what do these things _mean?_
-
-- `JIRA_SERVER`: This is the domain of your Jira environment, i.e. the url you go to to
-  visit Jira (e.g. `https://your-company.atlassian.net`)
-- `EMAIL_ADDRESS`: This is your email address your Jira account is associated with
-- `JIRA_KEY`: This can be found at https://id.atlassian.com/manage-profile/security
-  api-tokens. You may need to generate a key, if you haven't already
-- `PROJECT_KEY`: This is the letter designation in front of your Jira tickets. For
-  example, if your tickets are numbered like `ABC-123`, then your `PROJECT_KEY` is `ABC`
-- `INCREMENT_SECONDS`: How granular do you want your timekeeping to be, measured in
-  seconds. For example, if you want Allegro to add time to your calendar in 15 minute
-  blocks, you would set your `INCREMENT_SECONDS` to `900`
-- `OVERCLOCK_CHANCE`: To add some "fuzziness" to time entry, Allegro will occasionally
-  bill slightly more time to a task than is needed. `OVERCLOCK_CHANCE` represents the percentage chance that this occurs, e.g. `20` represents a 20% chance that a task gets
-  "overclocked."
-- `OVERCLOCK_RANGE`: The number of increments allowed to be overclocked. In other words,
-  if Allegro decides to overclock a task (based on `OVERCLOCK_CHANCE`), it will choose a number of blocks between 1 and `OVERCLOCK_RANGE`, and add that many additional increments (based on `INCREMENT_SECONDS`) to the task
-
 ## Building from source
 
 > Okay, I don't trust your bogus curl command, can I just build this from source?
@@ -98,3 +72,29 @@ It'll put a binary at `./dist/[macos | debian]/allegro` depending on your OS.
    ```
    python3 allegro.py
    ```
+
+## Configuration
+
+> It's asking me a lot of weird questions. What's the deal?
+
+On first run, Allegro will ask for needed configuration, such as your Jira
+Access key, email address, etc. It's writing the configuration to `~/.allegro/config.ini`,
+so it won't have to ask each time.
+
+> Okay, sure, but what do these things _mean?_
+
+- `JIRA_SERVER`: This is the domain of your Jira environment, i.e. the url you go to to
+  visit Jira (e.g. `https://your-company.atlassian.net`)
+- `EMAIL_ADDRESS`: This is your email address your Jira account is associated with
+- `JIRA_KEY`: This can be found at https://id.atlassian.com/manage-profile/security
+  api-tokens. You may need to generate a key, if you haven't already
+- `PROJECT_KEY`: This is the letter designation in front of your Jira tickets. For
+  example, if your tickets are numbered like `ABC-123`, then your `PROJECT_KEY` is `ABC`
+- `INCREMENT_SECONDS`: How granular do you want your timekeeping to be, measured in
+  seconds. For example, if you want Allegro to add time to your calendar in 15 minute
+  blocks, you would set your `INCREMENT_SECONDS` to `900`
+- `OVERCLOCK_CHANCE`: To add some "fuzziness" to time entry, Allegro will occasionally
+  bill slightly more time to a task than is needed. `OVERCLOCK_CHANCE` represents the percentage chance that this occurs, e.g. `20` represents a 20% chance that a task gets
+  "overclocked."
+- `OVERCLOCK_RANGE`: The number of increments allowed to be overclocked. In other words,
+  if Allegro decides to overclock a task (based on `OVERCLOCK_CHANCE`), it will choose a number of blocks between 1 and `OVERCLOCK_RANGE`, and add that many additional increments (based on `INCREMENT_SECONDS`) to the task
