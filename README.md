@@ -91,16 +91,7 @@ so it won't have to ask each time.
 
 ## Building from source
 
-1. Install `pyinstaller`
+> Okay, I don't trust your bogus curl command, can I just build this from source?
 
-   ```
-   pip3 install pyinstaller
-   ```
-
-2. Create binary
-
-   ```
-   pyinstaller allegro.py --onefile --distpath ./dist/{YOUR_ARCHITECTURE}
-   ```
-
-3. Binary now exists at `./dist/allegro`
+I mean, sure. Clone the repo, and run `./build.sh`. Note that this _only_ works for Linux and Mac.
+It'll put a binary at `./dist/[macos | debian]/allegro` depending on your OS.
