@@ -1,14 +1,18 @@
-# Allegro, for Fast Timekeeping
-
-![automated timekeeping](/automated-timekeeping.svg "automated timekeeping")
+![automated timekeeping](./automated-timekeeping.svg "automated timekeeping")
 
 [![forthebadge](https://forthebadge.com/images/badges/contains-technical-debt.svg)](https://forthebadge.com)
 
 [![forthebadge](https://forthebadge.com/images/badges/uses-badges.svg)](https://forthebadge.com)
 
-![allegro screenshot](/screenshot.png?raw=true "allegro screenshot")
+![allegro screenshot](./screenshot.png "allegro screenshot")
 
-## About Allegro
+- [1. About Allegro](#1-about-allegro)
+- [2. Installing, a.k.a. easy mode](#2-installing-aka-easy-mode)
+- [3. Building from source](#3-building-from-source)
+- [4. To Develop, or Run from Source](#4-to-develop-or-run-from-source)
+- [5. Configuration](#5-configuration)
+
+## 1. About Allegro
 
 > What is this thing?
 
@@ -33,7 +37,7 @@ to make sure you enter the required information correctly. **Allegro does not fa
 have a chance to give final approval before it submits anything to jira, though, so you're safe
 until that point.
 
-## Installing, a.k.a. easy mode
+## 2. Installing, a.k.a. easy mode
 
 macOs
 
@@ -47,14 +51,14 @@ debian
 sudo curl https://raw.githubusercontent.com/JudgeSansDredd/allegro/master/dist/debian/allegro --output /usr/local/bin/allegro && sudo chmod +x /usr/local/bin/allegro
 ```
 
-## Building from source
+## 3. Building from source
 
 > Okay, I don't trust your bogus curl command, can I just build this from source?
 
 I mean, sure. Clone the repo, and run `./build.sh`. Note that this _only_ works for Linux and Mac.
 It'll put a binary at `./dist/[macos | debian]/allegro` depending on your OS.
 
-## To Develop, or Run from Source
+## 4. To Develop, or Run from Source
 
 1. _Optional:_ Create a python virtual environment, then activate it
 
@@ -74,7 +78,7 @@ It'll put a binary at `./dist/[macos | debian]/allegro` depending on your OS.
    python3 allegro.py
    ```
 
-## Configuration
+## 5. Configuration
 
 > It's asking me a lot of weird questions. What's the deal?
 
