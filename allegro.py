@@ -10,7 +10,7 @@ from whiptail import Whiptail
 from jiraconnection.jiraaccess import JiraAccess
 from timekeeping.jiratimekeeping import JiraTimekeeping
 
-VERSION="1.0.1"
+VERSION="1.0.2"
 WHIPTAIL_SETTINGS={
     "title": f"Allegro ({VERSION})",
     "width": 100
@@ -115,7 +115,7 @@ def collectInfo(jira):
     issueList = [
         [
             issue.key,
-            issue.fields.summary[:47] + '...' if len(issue.fields.summary) > 50 else issue.fields.summary,
+            issue.fields.summary[:70] + '...' if len(issue.fields.summary) > 73 else issue.fields.summary,
             "1" if issue.fields.assignee.emailAddress == jira.emailAddress else "0"
         ]
         for issue in issues
