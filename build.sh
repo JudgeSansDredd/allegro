@@ -6,7 +6,9 @@ pip install -r requirements.txt
 pip install pyinstaller
 
 if [ "$(uname)" == "Darwin" ]; then
-  pyinstaller allegro.py --onefile --distpath ./dist/macos
+  $DIST_PATH = "./dist/macos"
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-  pyinstaller allegro.py --onefile --distpath ./dist/debian
+  $DIST_PATH = "./dist/debian"
 fi
+
+pyinstaller allegro.py --onefile --distpath $DIST_PATH
