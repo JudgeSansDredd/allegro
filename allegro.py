@@ -1,6 +1,6 @@
 import math
 from configparser import ConfigParser
-from datetime import date
+from datetime import date, timedelta
 from pathlib import Path
 from random import randint
 
@@ -13,7 +13,7 @@ from timekeeping.jiratimekeeping import JiraTimekeeping
 VERSION="1.0.1"
 WHIPTAIL_SETTINGS={
     "title": f"Allegro ({VERSION})",
-    "width": 75
+    "width": 100
 }
 configPath = Path(f'{Path.home()}/.allegro/config.ini')
 
@@ -61,16 +61,51 @@ def getConfiguration():
 
 def collectInfo(jira):
     wt = Whiptail(**WHIPTAIL_SETTINGS)
-    today = date.today().isoformat()
+
+    # Today as a date
+    today = date.today()
+    # If it's sunday, pretend it's the previous saturday
+    today = today if today.isoweekday() > 0 else today - timedelta(days=1)
+    # Monday of this week
+    startOfWeek = today - timedelta(days=(today.isoweekday() - 1))
+    # Monday of last week
+    startOfLastWeek = startOfWeek - timedelta(days=7)
 
     # Get Start Date
-    strStart, res = wt.inputbox("Start Date [YYYY-MM-DD]", default=today)
-    if res == 1:
-        return False, False, False
-    start = date(*[int(x) for x in strStart.split('-')])
+    res = 1
+    while res != 0:
+        startMenuRes, res = wt.menu(
+            "Pick a start date",
+            [
+                ["Today", today.isoformat()],
+                ["Current Week", startOfWeek.isoformat()],
+                ["Last Week", startOfLastWeek.isoformat()],
+                ["Custom", "Enter a specific date"]
+            ]
+        )
+        if res == 1:
+            return False, False, False
+        if startMenuRes == 'Custom':
+            strStart, res = wt.inputbox(
+                "START Date [YYYY-MM-DD]",
+                default=today.isoformat()
+            )
+            if res == 0:
+                start = date(*[int(x) for x in strStart.split('-')])
+        elif startMenuRes == 'Today':
+            start = today
+        elif startMenuRes == 'Current Week':
+            start = startOfWeek
+        elif startMenuRes == 'Last Week':
+            start = startOfLastWeek
+        else:
+            res = 1
 
     # Get End Date
-    strEnd, res = wt.inputbox("End Date [YYYY-MM-DD]", default=today)
+    strEnd, res = wt.inputbox(
+        "END Date [YYYY-MM-DD]",
+        default=today.isoformat()
+    )
     if res == 1:
         return False, False, False
     end = date(*[int(x) for x in strEnd.split('-')])
@@ -120,7 +155,12 @@ def askToProceed(days, issues, submissions):
             ]) / 3600 # Convert to hours
             row.append(time)
         tableData.append(row)
-    return not wt.yesno(tabulate(tableData, headers=headers), default="no")
+    tableString = tabulate(tableData, headers=headers)
+    question = "Do you want to submit the following times?"
+    return not wt.yesno(
+        f"{question}\n\n\n\n{tableString}",
+        default="no"
+    )
 
 def main():
     # Make sure our config file is written and has necessary info
