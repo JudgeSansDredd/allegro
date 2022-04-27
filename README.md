@@ -5,6 +5,7 @@
 [![forthebadge](https://forthebadge.com/images/badges/contains-technical-debt.svg)](https://forthebadge.com)
 
 [![forthebadge](https://forthebadge.com/images/badges/uses-badges.svg)](https://forthebadge.com)
+
 ![allegro screenshot](/screenshot.png?raw=true "allegro screenshot")
 
 ## About Allegro
