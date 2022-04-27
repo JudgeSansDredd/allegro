@@ -72,6 +72,13 @@ so it won't have to ask each time.
 - `OVERCLOCK_RANGE`: The number of increments allowed to be overclocked. In other words,
   if Allegro decides to overclock a task (based on `OVERCLOCK_CHANCE`), it will choose a number of blocks between 1 and `OVERCLOCK_RANGE`, and add that many additional increments (based on `INCREMENT_SECONDS`) to the task
 
+## Building from source
+
+> Okay, I don't trust your bogus curl command, can I just build this from source?
+
+I mean, sure. Clone the repo, and run `./build.sh`. Note that this _only_ works for Linux and Mac.
+It'll put a binary at `./dist/[macos | debian]/allegro` depending on your OS.
+
 ## To Develop, or Run from Source
 
 1. _Optional:_ Create a python virtual environment, then activate it
@@ -91,10 +98,3 @@ so it won't have to ask each time.
    ```
    python3 allegro.py
    ```
-
-## Building from source
-
-> Okay, I don't trust your bogus curl command, can I just build this from source?
-
-I mean, sure. Clone the repo, and run `./build.sh`. Note that this _only_ works for Linux and Mac.
-It'll put a binary at `./dist/[macos | debian]/allegro` depending on your OS.
