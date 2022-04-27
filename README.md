@@ -2,6 +2,8 @@
 
 [![forthebadge](https://forthebadge.com/images/badges/contains-technical-debt.svg)](https://forthebadge.com)
 
+![allegro screenshot](/screenshot.png?raw=true "allegro screenshot")
+
 ## About Allegro
 
 > What is this thing?
