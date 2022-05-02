@@ -59,7 +59,7 @@ def getConfiguration():
 
     return True
 
-def collectInfo(jira):
+def collectInfo(jira: JiraAccess):
     wt = Whiptail(**WHIPTAIL_SETTINGS)
 
     # Today as a date
@@ -116,7 +116,8 @@ def collectInfo(jira):
         [
             issue.key,
             issue.fields.summary[:70] + '...' if len(issue.fields.summary) > 73 else issue.fields.summary,
-            "1" if issue.fields.assignee.emailAddress == jira.emailAddress else "0"
+            "1" if issue.fields.assignee is not None
+            and issue.fields.assignee.emailAddress == jira.emailAddress else "0"
         ]
         for issue in issues
     ]
