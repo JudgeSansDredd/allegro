@@ -10,7 +10,7 @@ from whiptail import Whiptail
 from jiraconnection.jiraaccess import JiraAccess
 from timekeeping.jiratimekeeping import JiraTimekeeping
 
-VERSION="1.0.2"
+VERSION="1.0.3"
 WHIPTAIL_SETTINGS={
     "title": f"Allegro ({VERSION})",
     "width": 100
@@ -59,7 +59,7 @@ def getConfiguration():
 
     return True
 
-def collectInfo(jira):
+def collectInfo(jira: JiraAccess):
     wt = Whiptail(**WHIPTAIL_SETTINGS)
 
     # Today as a date
@@ -116,7 +116,8 @@ def collectInfo(jira):
         [
             issue.key,
             issue.fields.summary[:70] + '...' if len(issue.fields.summary) > 73 else issue.fields.summary,
-            "1" if issue.fields.assignee.emailAddress == jira.emailAddress else "0"
+            "1" if issue.fields.assignee is not None
+            and issue.fields.assignee.emailAddress == jira.emailAddress else "0"
         ]
         for issue in issues
     ]
