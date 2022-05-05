@@ -35,7 +35,8 @@ def getConfiguration():
         "ALLEGRO": [
             "INCREMENT_SECONDS",
             "OVERCLOCK_CHANCE",
-            "OVERCLOCK_RANGE"
+            "OVERCLOCK_RANGE",
+            "PERCENT_WORKED_PER_DAY"
         ]
     }
 

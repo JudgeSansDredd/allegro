@@ -20,12 +20,16 @@ class JiraTimekeeping():
             )
         )
         self.projectId = self.jira.project(config.get('JIRA', 'PROJECT_KEY')).id
+        self.percentWorkedPerDay = int(config.get(
+            'ALLEGRO',
+            'PERCENT_WORKED_PER_DAY'
+        ))
     def _getWorkDays(self, start, end):
         # TODO: Account for holidays
         return [
             {
                 'date': (start + timedelta(days=i)).isoformat(),
-                'required': 8 * 3600
+                'required': int(8 * 3600 * (self.percentWorkedPerDay / 100))
             }
             for i
             in range((end - start).days + 1)
