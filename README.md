@@ -108,3 +108,4 @@ so it won't have to ask each time.
   (based on `INCREMENT_SECONDS`) to the task.
 - `PERCENT_WORKED_PER_DAY`: How much time do you spend working on tasks a day. For example,
   `50` would mean you spend half your time on tasks, and half your time on other things.
+  Allegro would log approximately 4 hours of work per day.
