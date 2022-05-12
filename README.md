@@ -39,6 +39,9 @@ until that point.
 
 ## 2. Installing, a.k.a. easy mode
 
+**Note:** If you've previously installed allegro, reinstalling allegro over the top of it sometimes causes
+some wonkiness. I suggest you go ahead and `sudo rm -rf /usr/local/bin/allegro` before re-installing.
+
 macOs
 
 ```
