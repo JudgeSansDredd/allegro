@@ -1,4 +1,5 @@
 import math
+import os
 from configparser import ConfigParser
 from datetime import date, timedelta
 from pathlib import Path
@@ -10,10 +11,11 @@ from whiptail import Whiptail
 from jiraconnection.jiraaccess import JiraAccess
 from timekeeping.jiratimekeeping import JiraTimekeeping
 
-VERSION="1.0.4"
+VERSION="1.0.5"
 WHIPTAIL_SETTINGS={
     "title": f"Allegro ({VERSION})",
-    "width": 100
+    "width": os.get_terminal_size().columns - 10,
+    "height": os.get_terminal_size().lines - 10
 }
 configPath = Path(f'{Path.home()}/.allegro/config.ini')
 
