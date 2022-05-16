@@ -11,11 +11,15 @@ from whiptail import Whiptail
 from jiraconnection.jiraaccess import JiraAccess
 from timekeeping.jiratimekeeping import JiraTimekeeping
 
-VERSION="1.0.5"
+VERSION="1.0.6"
+
+TERMINAL_WIDTH=os.get_terminal_size().columns
+TERMINAL_HEIGHT=os.get_terminal_size().lines
+
 WHIPTAIL_SETTINGS={
     "title": f"Allegro ({VERSION})",
-    "width": os.get_terminal_size().columns - 10,
-    "height": os.get_terminal_size().lines - 10
+    "width": TERMINAL_WIDTH - 10,
+    "height": TERMINAL_HEIGHT - 10
 }
 configPath = Path(f'{Path.home()}/.allegro/config.ini')
 
@@ -118,7 +122,9 @@ def collectInfo(jira: JiraAccess):
     issueList = [
         [
             issue.key,
-            issue.fields.summary[:70] + '...' if len(issue.fields.summary) > 73 else issue.fields.summary,
+            issue.fields.summary[:(TERMINAL_WIDTH - 39)] + '...'
+            if len(issue.fields.summary) > TERMINAL_WIDTH - 36
+            else issue.fields.summary,
             "1" if issue.fields.assignee is not None
             and issue.fields.assignee.emailAddress == jira.emailAddress else "0"
         ]
