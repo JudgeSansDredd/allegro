@@ -11,7 +11,7 @@ from whiptail import Whiptail
 from jiraconnection.jiraaccess import JiraAccess
 from timekeeping.jiratimekeeping import JiraTimekeeping
 
-VERSION="1.0.6"
+VERSION="1.0.7"
 
 TERMINAL_WIDTH=os.get_terminal_size().columns
 TERMINAL_HEIGHT=os.get_terminal_size().lines
@@ -77,6 +77,10 @@ def collectInfo(jira: JiraAccess):
     startOfWeek = today - timedelta(days=(today.isoweekday() - 1))
     # Monday of last week
     startOfLastWeek = startOfWeek - timedelta(days=7)
+    # Friday of this week
+    endOfWeek = startOfWeek + timedelta(days=4)
+    # Friday of last week
+    endOfLastWeek = endOfWeek - timedelta(days=7)
 
     # Get Start Date
     res = 1
@@ -85,8 +89,8 @@ def collectInfo(jira: JiraAccess):
             "Pick a start date",
             [
                 ["Today", today.isoformat()],
-                ["Current Week", startOfWeek.isoformat()],
-                ["Last Week", startOfLastWeek.isoformat()],
+                ["Start of Current Week", startOfWeek.isoformat()],
+                ["Start of Last Week", startOfLastWeek.isoformat()],
                 ["Custom", "Enter a specific date"]
             ]
         )
@@ -101,21 +105,53 @@ def collectInfo(jira: JiraAccess):
                 start = date(*[int(x) for x in strStart.split('-')])
         elif startMenuRes == 'Today':
             start = today
-        elif startMenuRes == 'Current Week':
+        elif startMenuRes == 'Start of Current Week':
             start = startOfWeek
-        elif startMenuRes == 'Last Week':
+        elif startMenuRes == 'Start of Last Week':
             start = startOfLastWeek
         else:
             res = 1
 
+    endDates = [
+        ["Today", today],
+        ["End of Current Week", endOfWeek],
+        ["End of Last Week", endOfLastWeek]
+    ]
+    validEndDates = [
+        d
+        for d
+        in endDates
+        if d[1] >= start
+    ]
+    compiledEndDates = [
+        [d[0], d[1].isoformat()] for d in validEndDates
+    ]
+    compiledEndDates.append(["Custom", "Enter a specific date"])
     # Get End Date
-    strEnd, res = wt.inputbox(
-        "END Date [YYYY-MM-DD]",
-        default=today.isoformat()
-    )
-    if res == 1:
-        return False, False, False
-    end = date(*[int(x) for x in strEnd.split('-')])
+    res = 1
+    while res != 0:
+        endMenuRes, res = wt.menu(
+            "Pick an end date",
+            compiledEndDates
+        )
+
+        if res == 1:
+            return False, False, False
+        if endMenuRes == 'Custom':
+            strEnd, res = wt.inputbox(
+                "END Date [YYYY-MM-DD]",
+                default=today.isoformat()
+            )
+            if res == 0:
+                end = date(*[int(x) for x in strEnd.split('-')])
+        elif endMenuRes == 'Today':
+            end = today
+        elif endMenuRes == 'End of Current Week':
+            end = endOfWeek
+        elif endMenuRes == 'End of Last Week':
+            end = endOfLastWeek
+        else:
+            res = 1
 
     # Get jira issues
     issues = jira.getIssues()
