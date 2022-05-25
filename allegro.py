@@ -21,7 +21,7 @@ WHIPTAIL_SETTINGS={
     "width": TERMINAL_WIDTH - 10,
     "height": TERMINAL_HEIGHT - 10
 }
-configPath = Path(f'{Path.home()}/.allegro/config.ini')
+CONFIG_PATH = Path(f'{Path.home()}/.allegro/config.ini')
 
 def getConfiguration():
     # Whiptail
@@ -29,7 +29,7 @@ def getConfiguration():
 
     # Get the config object as it exists
     config = ConfigParser()
-    config.read(configPath)
+    config.read(CONFIG_PATH)
 
     configItems = {
         "JIRA": [
@@ -60,8 +60,8 @@ def getConfiguration():
 
 
     # Make sure the .allegro directory exists
-    configPath.parents[0].mkdir(parents=True, exist_ok=True)
-    with open(configPath, 'w', encoding="UTF-8") as conf:
+    CONFIG_PATH.parents[0].mkdir(parents=True, exist_ok=True)
+    with open(CONFIG_PATH, 'w', encoding="UTF-8") as conf:
         config.write(conf)
 
     return True
@@ -216,14 +216,14 @@ def main():
 
     # Get settings
     config = ConfigParser()
-    config.read(configPath)
+    config.read(CONFIG_PATH)
     overclockRange = int(config.get('ALLEGRO', 'OVERCLOCK_RANGE'))
     incrementSeconds = int(config.get('ALLEGRO', 'INCREMENT_SECONDS'))
     overclockChance = int(config.get('ALLEGRO', 'OVERCLOCK_CHANCE'))
 
     # Access jira and timekeeping
-    jira = JiraAccess(configPath)
-    timekeeping = JiraTimekeeping(configPath)
+    jira = JiraAccess(CONFIG_PATH)
+    timekeeping = JiraTimekeeping(CONFIG_PATH)
 
     # Collect user information
     start, end, issues = collectInfo(jira)
