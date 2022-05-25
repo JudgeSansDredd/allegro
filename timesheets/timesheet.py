@@ -70,6 +70,9 @@ class DayTimeSheet():
         }
         return json.dumps(out, indent=4)
 
+    def __repr__(self):
+        return self.__str__()
+
     def addWork(self, issue, time):
         if issue in self.worklogs:
             current = self.worklogs[issue]
