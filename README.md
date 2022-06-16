@@ -94,8 +94,8 @@ so it won't have to ask each time.
 - `JIRA_SERVER`: This is the domain of your Jira environment, i.e. the url you go to to
   visit Jira (e.g. `https://your-company.atlassian.net`).
 - `EMAIL_ADDRESS`: This is your email address your Jira account is associated with
-- `JIRA_KEY`: This can be found at https://id.atlassian.com/manage-profile/security
-  api-tokens. You may need to generate a key, if you haven't already.
+- `JIRA_KEY`: This can be found at https://id.atlassian.com/manage-profile/security/api-tokens.
+  You may need to generate a key, if you haven't already.
 - `PROJECT_KEY`: This is the letter designation in front of your Jira tickets. For
   example, if your tickets are numbered like `ABC-123`, then your `PROJECT_KEY` is `ABC`.
 - `INCREMENT_SECONDS`: How granular do you want your timekeeping to be, measured in
