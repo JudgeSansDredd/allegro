@@ -11,7 +11,7 @@ from whiptail import Whiptail
 from jiraconnection.jiraaccess import JiraAccess
 from timekeeping.jiratimekeeping import JiraTimekeeping
 
-VERSION="1.0.7"
+VERSION="1.1.0"
 
 TERMINAL_WIDTH=os.get_terminal_size().columns
 TERMINAL_HEIGHT=os.get_terminal_size().lines
