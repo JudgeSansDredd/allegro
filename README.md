@@ -11,6 +11,7 @@
 - [3. Building from source](#3-building-from-source)
 - [4. To Develop, or Run from Source](#4-to-develop-or-run-from-source)
 - [5. Configuration](#5-configuration)
+- [6. Newt](#6-newt)
 
 ## 1. About Allegro
 
@@ -112,3 +113,10 @@ so it won't have to ask each time.
 - `PERCENT_WORKED_PER_DAY`: How much time do you spend working on tasks a day. For example,
   `50` would mean you spend half your time on tasks, and half your time on other things.
   Allegro would log approximately 4 hours of work per day.
+
+## 6. Newt
+
+> It's yelling at me about not having whiptail, or something
+
+Whiptail is a bash program that allows for fancy looking GUIs. If you don't have it installed,
+the fastest way to get it is by running `brew install newt`. It comes in the `newt` package.
