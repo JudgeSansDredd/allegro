@@ -1,6 +1,6 @@
 import time
 from configparser import ConfigParser
-from datetime import date, datetime, timedelta
+from datetime import datetime, timedelta
 
 import pytz
 from jira import JIRA
@@ -25,6 +25,8 @@ class JiraTimekeeping():
             'ALLEGRO',
             'PERCENT_WORKED_PER_DAY'
         ))
+
+        self.timezone = pytz.timezone(config.get('ALLEGRO', 'TIMEZONE'))
     def _getWorkDays(self, start, end):
         # TODO: Account for holidays
         return [
@@ -89,9 +91,11 @@ class JiraTimekeeping():
 
         print(f'Submitting {timeSpent / 3600} for {issue} on {day}... ', end='')
 
-        tz = pytz.timezone('US/Eastern')
         naiveDateTime = datetime.fromisoformat(day)
-        localDateTime = tz.localize(naiveDateTime, time.localtime().tm_isdst)
+        localDateTime = self.timezone.localize(
+            naiveDateTime,
+            time.localtime().tm_isdst
+        )
 
         # Add 12 hours so we log time at noon
         localDateTime += timedelta(hours=12)

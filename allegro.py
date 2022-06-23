@@ -42,7 +42,8 @@ def getConfiguration():
             "INCREMENT_SECONDS",
             "OVERCLOCK_CHANCE",
             "OVERCLOCK_RANGE",
-            "PERCENT_WORKED_PER_DAY"
+            "PERCENT_WORKED_PER_DAY",
+            "TIMEZONE"
         ]
     }
 
@@ -52,12 +53,19 @@ def getConfiguration():
             config.add_section(section)
         for option in options:
             if not config.has_option(section, option):
-                default = "https://bandwidth-jira.atlassian.net" if option == "JIRA_SERVER" else ""
-                value, response = wt.inputbox(f"Enter value for: {option}", default)
+                if option == "TIMEZONE":
+                    value, response = wt.menu("Choose a timezone", [
+                        ["US/Eastern", "Eastern Time Zone (UTC -5/-4)"],
+                        ["US/Central", "Central Time Zone (UTC -6/-5"],
+                        ["US/Mountain", "Mountain Time Zone (UTC -7/-6"],
+                        ["US/Pacific", "Pacific Time Zone (UTC -8/-7"]
+                    ])
+                else:
+                    default = "https://bandwidth-jira.atlassian.net" if option == "JIRA_SERVER" else ""
+                    value, response = wt.inputbox(f"Enter value for: {option}", default)
                 if response == 1:
                     return False
                 config.set(section, option, value)
-
 
     # Make sure the .allegro directory exists
     CONFIG_PATH.parents[0].mkdir(parents=True, exist_ok=True)
