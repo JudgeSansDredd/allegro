@@ -2,3 +2,4 @@ jira
 tabulate
 whiptail-dialogs
 configparser
+pytz

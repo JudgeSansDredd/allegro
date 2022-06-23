@@ -1,7 +1,8 @@
+import time
 from configparser import ConfigParser
-from datetime import datetime, timedelta
-from pathlib import Path
+from datetime import date, datetime, timedelta
 
+import pytz
 from jira import JIRA
 
 from timesheets.timesheet import DayTimeSheet, IssueTimeSheet, TimeSheet
@@ -88,10 +89,22 @@ class JiraTimekeeping():
 
         print(f'Submitting {timeSpent / 3600} for {issue} on {day}... ', end='')
 
+        tz = pytz.timezone('US/Eastern')
+        naiveDateTime = datetime.fromisoformat(day)
+        localDateTime = tz.localize(naiveDateTime, time.localtime().tm_isdst)
+
+        # Add 12 hours so we log time at noon
+        localDateTime += timedelta(hours=12)
+
+        # NOTE: I don't know why, but Jira insists that I'm 2 hours further
+        # back from UTC than I actually am. I'm adding two hours to the start
+        # date so that the hours worked still show up on the correct day
+        localDateTime += timedelta(hours=2)
+
         # NOTE: We're making the assumption that the largest time will be less than one day
         params = {
             "issue": issue,
-            "started": datetime.fromisoformat(day),
+            "started": localDateTime,
             "timeSpentSeconds": timeSpent,
             "newEstimate": "0m"
         }
