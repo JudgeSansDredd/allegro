@@ -15,7 +15,7 @@ class JiraAccess():
                 config.get('JIRA', 'JIRA_KEY')
             )
         )
-        self.projectId = self.jira.project(config.get('JIRA', 'PROJECT_KEY')).id
+        self.projectId = self.jira.project('TIGER').id
         self.emailAddress = config.get('JIRA', 'EMAIL_ADDRESS')
 
     def getAllSubtasks(self, issueKeys):
@@ -43,7 +43,7 @@ class JiraAccess():
         Gets all issues in current sprint, plus any additional issues specified
         by issueKeys, which is a list of keys.
         """
-        sprintQuery = f"project={self.projectId} AND Sprint in openSprints()"
+        sprintQuery = f"project={self.projectId}"
         if issueKeys is not None and len(issueKeys) > 0:
             keyString = ', '.join([f'\"{key}\"' for key in issueKeys])
             keyQuery = f"key IN ({keyString})"

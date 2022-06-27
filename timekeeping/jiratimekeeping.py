@@ -20,7 +20,7 @@ class JiraTimekeeping():
                 config.get('JIRA', 'JIRA_KEY')
             )
         )
-        self.projectId = self.jira.project(config.get('JIRA', 'PROJECT_KEY')).id
+        self.projectId = self.jira.project('TIGER').id
         self.percentWorkedPerDay = int(config.get(
             'ALLEGRO',
             'PERCENT_WORKED_PER_DAY'
